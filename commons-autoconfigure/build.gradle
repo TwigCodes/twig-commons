@@ -1,0 +1,8 @@
+dependencies {
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
+    implementation "org.zalando:problem-spring-web:${problemVersion}"
+    implementation "org.javassist:javassist:${javassistVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-autoconfigure-processor"
+}

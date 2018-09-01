@@ -1,0 +1,2 @@
+include 'commons-autoconfigure', 'commons-starter'
+rootProject.name = 'twig-commons'

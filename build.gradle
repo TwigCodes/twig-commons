@@ -1,0 +1,94 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'maven'
+    id 'maven-publish'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE' apply false
+    id 'com.jfrog.bintray' version '1.8.4'
+}
+ext {
+    springBootVersion = '2.0.4.RELEASE'
+    problemVersion = '0.21.0'
+    javassistVersion = '3.18.2-GA'
+}
+allprojects {
+    task projectNames {
+        doLast { task ->
+            println "I'm $task.project.name"
+        }
+    }
+    task printProps {
+        doLast {
+            println bintrayUser
+            println bintrayApiKey
+            println project.hasProperty('bintrayUser')
+            println project.property('bintrayUser')
+        }
+    }
+}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    group = 'com.twigcodes'
+    version = '0.0.1'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation "org.assertj:assertj-core"
+    }
+    dependencyManagement {
+        imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    }
+}
+project(':commons-starter') {
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+    artifacts {
+        archives sourcesJar, javadocJar
+    }
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+    bintray {
+        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+        println user
+        println key
+        publications = ['mavenJava']
+        publish = true
+        pkg {
+            repo = 'libs'
+            name = 'twig-commons'
+            desc = 'TwigCodes Common Library Spring Boot Starter'
+            userOrg = 'twigcodes'
+            licenses = ['Apache-2.0']
+            issueTrackerUrl = 'https://github.com/TwigCodes/twig-commons/issues'
+            vcsUrl = 'https://github.com/TwigCodes/twig-commons.git'
+            websiteUrl = 'https://twigcodes.com'
+            publicDownloadNumbers = true
+        }
+    }
+    task release {
+        dependsOn 'clean'
+        dependsOn 'build'
+        dependsOn 'bintrayUpload'
+        tasks.findByName('build').mustRunAfter 'clean'
+        tasks.findByName('bintrayUpload').mustRunAfter 'build'
+    }
+}
