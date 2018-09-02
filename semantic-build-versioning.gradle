@@ -1,0 +1,9 @@
+startingVersion='1.0.0'
+snapshotSuffix = 'Candidate'
+autobump {
+    majorPattern = ~/^(.+)\[bump-major\]$/
+    minorPattern = ~/^(.+)\[bump-minor\]$/
+    patchPattern = ~/^(.+)\[bump-patch\]$/
+    newPreReleasePattern = ~/^(.+)\[make-new-pre-release\]$/
+    promoteToReleasePattern = ~/^(.+)\[promote-to-release\]$/
+}

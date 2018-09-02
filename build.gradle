@@ -1,7 +1,6 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'maven'
     id 'maven-publish'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE' apply false
     id 'com.jfrog.bintray' version '1.8.4'
@@ -29,7 +28,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
     group = 'com.twigcodes'
-    version = '0.0.1'
+    version = rootProject.version
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     repositories {
@@ -83,11 +82,12 @@ project(':commons-starter') {
             publicDownloadNumbers = true
         }
     }
-    task release {
+    task upload {
         dependsOn 'clean'
         dependsOn 'build'
         dependsOn 'bintrayUpload'
         tasks.findByName('build').mustRunAfter 'clean'
         tasks.findByName('bintrayUpload').mustRunAfter 'build'
     }
+
 }
