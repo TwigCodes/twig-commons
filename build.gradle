@@ -9,7 +9,6 @@ plugins {
 ext {
     springBootVersion = '2.0.4.RELEASE'
     problemVersion = '0.21.0'
-    javassistVersion = '3.18.2-GA'
 }
 allprojects {
     task projectNames {
