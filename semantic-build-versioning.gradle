@@ -1,4 +1,4 @@
-startingVersion='1.0.0'
+startingVersion='0.1.0'
 snapshotSuffix = 'Candidate'
 autobump {
     majorPattern = ~/^(.+)\[bump-major\]$/
