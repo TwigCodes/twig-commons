@@ -1,6 +1,0 @@
-dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
-    implementation "com.twigcodes:commons-autoconfigure:${version}"
-    implementation "org.zalando:problem-spring-web:${problemVersion}"
-}
