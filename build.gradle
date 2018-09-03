@@ -42,7 +42,7 @@ subprojects {
         imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
     }
 }
-project(':commons-starter') {
+project(':commons-spring-boot-starter') {
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
     task javadocJar(type: Jar) {
