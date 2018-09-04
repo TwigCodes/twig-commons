@@ -17,7 +17,7 @@ import org.zalando.problem.validation.ConstraintViolationProblemModule;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnClass({ Problem.class, AfterburnerModule.class })
+@ConditionalOnClass({ Problem.class })
 @ConditionalOnMissingBean({ AfterburnerModule.class, ProblemModule.class, ConstraintViolationProblemModule.class })
 public class ProblemAutoConfiguration {
     /*

@@ -1,4 +1,5 @@
 startingVersion='0.1.0'
+snapshotSuffix='Candidate'
 autobump {
     majorPattern = ~/^(.+)\[bump-major\]$/
     minorPattern = ~/^(.+)\[bump-minor\]$/
