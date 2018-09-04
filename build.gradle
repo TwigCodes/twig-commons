@@ -86,12 +86,10 @@ dependencyManagement {
 dependencies {
     implementation "javax.servlet:javax.servlet-api"
     implementation "org.springframework.data:spring-data-commons"
-
     implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
     implementation "io.springfox:springfox-swagger2:${springFoxVersion}"
     implementation "io.springfox:springfox-bean-validators:${springFoxVersion}"
-    implementation "io.springfox:springfox-swagger-ui:${springFoxVersion}"
     implementation "org.zalando:problem-spring-web:${problemVersion}"
     annotationProcessor "org.springframework.boot:spring-boot-autoconfigure-processor"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
