@@ -6,6 +6,8 @@ import com.google.common.base.Predicate;
 import com.twigcodes.commons.Constants;
 import com.twigcodes.commons.config.CommonProperties.SwaggerApiInfo;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -40,13 +42,14 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 @EnableSwagger2
 @ConditionalOnWebApplication
+@ConditionalOnClass(BeanValidatorPluginsConfiguration.class)
 @ConditionalOnMissingBean({
     Docket.class,
     AlternateTypeRuleConvention.class,
     SecurityScheme.class,
     SecurityConfiguration.class
 })
-@ComponentScan(basePackages = "com.twigcodes")
+@ComponentScan(basePackages = "${commons.swaggerApiInfo.scanPackages}")
 @Import({ BeanValidatorPluginsConfiguration.class })
 @Configuration
 public class SwaggerAutoConfiguration {
@@ -55,6 +58,8 @@ public class SwaggerAutoConfiguration {
     private static final String authorizationScopeGlobal = "read";
     private static final String authorizationScopeGlobalDesc = "accessEverything";
     private final CommonProperties commonProperties;
+    @Value("commons.swaggerApiInfo.scanPackages")
+    private String basePackages;
 
     public SwaggerAutoConfiguration(CommonProperties commonProperties) {
         this.commonProperties = commonProperties;
@@ -68,7 +73,7 @@ public class SwaggerAutoConfiguration {
     @Bean
     public Docket apiDoc() {
         return new Docket(DocumentationType.SWAGGER_2).select().paths(postPaths())
-            .apis(RequestHandlerSelectors.basePackage(Constants.BASE_PACKAGE_NAME + ".web.rest"))
+            .apis(RequestHandlerSelectors.basePackage(basePackages))
             .paths(springBootActuatorJmxPaths())
             .build()
             .pathMapping("/")
