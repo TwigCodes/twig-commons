@@ -3,10 +3,8 @@ package com.twigcodes.commons.config;
 import com.fasterxml.classmate.TypeResolver;
 
 import com.google.common.base.Predicate;
-import com.twigcodes.commons.Constants;
 import com.twigcodes.commons.config.CommonProperties.SwaggerApiInfo;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -58,8 +56,6 @@ public class SwaggerAutoConfiguration {
     private static final String authorizationScopeGlobal = "read";
     private static final String authorizationScopeGlobalDesc = "accessEverything";
     private final CommonProperties commonProperties;
-    @Value("commons.swaggerApiInfo.scanPackages")
-    private String basePackages;
 
     public SwaggerAutoConfiguration(CommonProperties commonProperties) {
         this.commonProperties = commonProperties;
@@ -72,16 +68,17 @@ public class SwaggerAutoConfiguration {
      */
     @Bean
     public Docket apiDoc() {
-        return new Docket(DocumentationType.SWAGGER_2).select().paths(postPaths())
-            .apis(RequestHandlerSelectors.basePackage(basePackages))
-            .paths(springBootActuatorJmxPaths())
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .paths(postPaths())
+                .apis(RequestHandlerSelectors.any())
+                .paths(springBootActuatorJmxPaths())
             .build()
-            .pathMapping("/")
-            .securitySchemes(Collections.singletonList(oauth()))
-            .securityContexts(Collections.singletonList(securityContext()))
-            .directModelSubstitute(LocalDate.class, String.class)
-            .genericModelSubstitutes(ResponseEntity.class)
-            .apiInfo(apiInfo());
+                .pathMapping("/")
+                .securitySchemes(Collections.singletonList(oauth()))
+                .securityContexts(Collections.singletonList(securityContext()))
+                .directModelSubstitute(LocalDate.class, String.class)
+                .genericModelSubstitutes(ResponseEntity.class)
+                .apiInfo(apiInfo());
     }
 
     @Bean
@@ -94,35 +91,41 @@ public class SwaggerAutoConfiguration {
 
             @Override
             public List<AlternateTypeRule> rules() {
-                return Collections.singletonList(
-                    newRule(resolver.resolve(Pageable.class), resolver.resolve(pageableMixin()))
-                );
+                return Collections.singletonList(newRule(
+                    resolver.resolve(Pageable.class),
+                    resolver.resolve(pageableMixin())));
             }
         };
     }
 
     private Type pageableMixin() {
         return new AlternateTypeBuilder()
-            .fullyQualifiedClassName(
-                String.format("%s.generated.%s", Pageable.class.getPackage().getName(),
-                    Pageable.class.getSimpleName()))
-            .withProperties(
-                Arrays.asList(property(Integer.class, "page"), property(Integer.class, "size"),
-                    property(String.class, "sort")))
+            .fullyQualifiedClassName(String.format(
+                "%s.generated.%s",
+                Pageable.class.getPackage().getName(),
+                Pageable.class.getSimpleName()))
+            .withProperties(Arrays.asList(
+                property(Integer.class, "page"),
+                property(Integer.class, "size"),
+                property(String.class, "sort")))
             .build();
     }
 
     private AlternateTypePropertyBuilder property(Class<?> type, String name) {
-        return new AlternateTypePropertyBuilder().withName(name).withType(type).withCanRead(true).withCanWrite(true);
+        return new AlternateTypePropertyBuilder()
+            .withName(name)
+            .withType(type)
+            .withCanRead(true)
+            .withCanWrite(true);
     }
 
     @Bean
     public SecurityScheme oauth() {
         return new OAuthBuilder()
-                .name(securitySchemaOAuth2)
-                .scopes(scopes())
-                .grantTypes(grantTypes())
-                .build();
+            .name(securitySchemaOAuth2)
+            .scopes(scopes())
+            .grantTypes(grantTypes())
+            .build();
     }
 
     @Bean
@@ -165,12 +168,10 @@ public class SwaggerAutoConfiguration {
 
     private List<SecurityReference> defaultAuth() {
 
-        final AuthorizationScope authorizationScope =
-            new AuthorizationScope(authorizationScopeGlobal, authorizationScopeGlobalDesc);
+        final AuthorizationScope authorizationScope = new AuthorizationScope(authorizationScopeGlobal, authorizationScopeGlobalDesc);
         final AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Collections
-            .singletonList(new SecurityReference(securitySchemaOAuth2, authorizationScopes));
+        return Collections.singletonList(new SecurityReference(securitySchemaOAuth2, authorizationScopes));
     }
     /**
      * 对 API 的概要信息进行定制
