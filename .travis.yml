@@ -1,0 +1,28 @@
+language: java
+
+jdk:
+    - oraclejdk8
+
+sudo: required
+
+services:
+    - docker
+
+install: true
+
+script: gradle build
+
+deploy:
+    - provider: releases
+      skip_cleanup: true
+      api_key: $GITHUB_ACCESS_TOKEN
+      file: target/commons-spring-boot-starter.jar
+      on:
+          repo: TwigCodes/twig-commons
+          tags: true
+    - provider: script
+      script: gradle uploadToBintray
+      on:
+          repo: TwigCodes/twig-commons
+          branch: master
+          tags: true
