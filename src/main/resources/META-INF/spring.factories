@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.twigcodes.commons.config.ProblemAutoConfiguration,\
-com.twigcodes.commons.config.SwaggerAutoConfiguration
+com.twigcodes.commons.config.ProblemAutoConfiguration
+

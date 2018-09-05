@@ -2,9 +2,7 @@ package com.twigcodes.commons.config;
 
 import com.twigcodes.commons.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ConfigurationProperties(prefix = "commons")
 public class CommonProperties {
 
@@ -69,7 +67,7 @@ public class CommonProperties {
     public static class SwaggerApiInfo {
 
         private String scanPackages = Constants.BASE_PACKAGE_NAME;
-        private String title = "推码科技通交互式文档";
+        private String title = "推码科技交互式文档";
         private String description = "基于 Rest 标准定义的 API 接口，供 Android， iOS 和 Web 客户端调用";
         private String version = "1.0";
         private String termsOfServiceUrl = "http://www.twigcodes.com/apicube/tos.html";
