@@ -1,16 +1,15 @@
 startingVersion='0.1.0'
-snapshotSuffix='Candidate'
 autobump {
-    majorPattern = ~/^(.+)\[bump-major\]$/
-    minorPattern = ~/^(.+)\[bump-minor\]$/
-    patchPattern = ~/^(.+)\[bump-patch\]$/
-    newPreReleasePattern = ~/^(.+)\[make-new-pre-release\]$/
-    promoteToReleasePattern = ~/^(.+)\[promote-to-release\]$/
+    majorPattern = ~/\[major\]/
+    minorPattern = ~/\[minor\]/
+    patchPattern = ~/\[patch\]/
+    newPreReleasePattern = ~/\[new-pre-release\]/
+    promoteToReleasePattern = ~/\[promote\]/
 }
 preRelease {
-    startingVersion='alpha.0'
-    // The bumping scheme is alpha.0 -> alpha.1 -> ... -> alpha.n
+    startingVersion='beta.0'
+    // The bumping scheme is beta.0 -> beta.1 -> ... -> beta.n
     bump = {
-        "alpha.${((it - ~/^alpha\./) as int) + 1}"
+        "beta.${((it - ~/^beta\./) as int) + 1}"
     }
 }

@@ -73,6 +73,7 @@ bintray {
 task uploadToBintray {
     dependsOn 'clean'
     dependsOn 'build'
+    dependsOn 'tag'
     dependsOn 'bintrayUpload'
     tasks.findByName('build').mustRunAfter 'clean'
     tasks.findByName('bintrayUpload').mustRunAfter 'build'
