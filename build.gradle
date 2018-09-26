@@ -1,9 +1,10 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.4.RELEASE'
+        springBootVersion = '2.0.5.RELEASE'
         problemVersion = '0.23.0'
         springFoxVersion = '2.9.2'
     }
+    ext['lombok.version'] = '1.18.2'
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -13,89 +14,27 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'io.spring.dependency-management'
-group='com.twigcodes'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-task projectNames {
-    doLast { task ->
-        println "I'm $task.project.name"
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+}
+subprojects {
+    apply plugin: 'io.spring.dependency-management'
+    version = rootProject.version
+    group='com.twigcodes'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        annotationProcessor('org.projectlombok:lombok')
+        compileOnly('org.projectlombok:lombok')
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.assertj:assertj-core")
+    }
+    dependencyManagement {
+        imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
     }
 }
-task printProps {
-    doLast {
-        println bintrayUser
-        println bintrayApiKey
-        println project.hasProperty('bintrayUser')
-        println project.property('bintrayUser')
-    }
-}
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-artifacts {
-    archives sourcesJar, javadocJar
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    println user
-    println key
-    publications = ['mavenJava']
-    publish = true
-    pkg {
-        repo = 'libs'
-        name = 'twig-commons'
-        desc = 'TwigCodes Common Library Spring Boot Starter'
-        userOrg = 'twigcodes'
-        licenses = ['Apache-2.0']
-        issueTrackerUrl = 'https://github.com/TwigCodes/twig-commons/issues'
-        vcsUrl = 'https://github.com/TwigCodes/twig-commons.git'
-        websiteUrl = 'https://twigcodes.com'
-        publicDownloadNumbers = true
-    }
-}
-task uploadToBintray {
-    dependsOn 'clean'
-    dependsOn 'build'
-    dependsOn 'tag'
-    dependsOn 'bintrayUpload'
-    tasks.findByName('build').mustRunAfter 'clean'
-    tasks.findByName('bintrayUpload').mustRunAfter 'build'
-}
-repositories {
-    mavenCentral()
-}
-dependencyManagement {
-    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
-}
-dependencies {
-    implementation "javax.servlet:javax.servlet-api"
-    implementation "org.springframework:spring-webmvc"
-    implementation "org.springframework.security:spring-security-web"
-    implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.springframework.data:spring-data-commons"
-    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
-    implementation "io.springfox:springfox-swagger2:${springFoxVersion}"
-    implementation "io.springfox:springfox-bean-validators:${springFoxVersion}"
-    implementation "org.zalando:problem-spring-web:${problemVersion}"
-    compileOnly "org.springframework.boot:spring-boot-autoconfigure-processor"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.assertj:assertj-core"
-}
-//compileJava.dependsOn(processResources)

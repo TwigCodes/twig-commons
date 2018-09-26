@@ -14,7 +14,6 @@ import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
-import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
 
 /**
@@ -23,7 +22,7 @@ import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProbl
  * @author Peng Wang (wpcfan@gmail.com)
  */
 @ControllerAdvice
-public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
+public class ExceptionTranslator implements ProblemHandling {
 
     private final HttpServletRequest request;
 
@@ -80,4 +79,5 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             .build();
         return create(ex, problem, req);
     }
+
 }

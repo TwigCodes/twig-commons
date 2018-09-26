@@ -11,4 +11,6 @@ buildscript {
 
 apply plugin: 'net.vivin.gradle-semantic-build-versioning'
 
+include 'common-library'
+include 'example'
 rootProject.name = 'commons-spring-boot-starter'

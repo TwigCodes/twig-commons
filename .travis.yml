@@ -10,7 +10,7 @@ services:
 
 install: true
 
-script: gradle build
+script: gradle :common-library:build
 
 deploy:
     - provider: releases
@@ -21,7 +21,7 @@ deploy:
           repo: TwigCodes/twig-commons
           tags: true
     - provider: script
-      script: gradle uploadToBintray
+      script: gradle :common-library:uploadToBintray
       on:
           repo: TwigCodes/twig-commons
           branch: master

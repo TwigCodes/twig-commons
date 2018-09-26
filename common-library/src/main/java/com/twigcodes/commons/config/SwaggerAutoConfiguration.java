@@ -24,6 +24,7 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.ApiKeyVehicle;
 import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -130,8 +131,18 @@ public class SwaggerAutoConfiguration {
 
     @Bean
 	public List<GrantType> grantTypes() {
-		List<GrantType> grantTypes = new ArrayList<>();
-		LoginEndpoint loginEndpoint = new LoginEndpoint(commonProperties.getOAuth2().getAuthorizeUrl());
+        List<GrantType> grantTypes = new ArrayList<>();
+        // grantTypes.add(new ResourceOwnerPasswordCredentialsGrant(commonProperties.getOAuth2().getTokenUrl()));
+        // TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpointBuilder()
+        //     .clientIdName(commonProperties.getOAuth2().getClientId())
+        //     .url(commonProperties.getOAuth2().getAuthorizeUrl())
+        //     .build();
+        // TokenEndpoint tokenEndpoint = new TokenEndpointBuilder()
+        //     .url(commonProperties.getOAuth2().getTokenUrl())
+        //     .tokenName("access_token")
+        //     .build();
+        // grantTypes.add(new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint));
+        LoginEndpoint loginEndpoint = new LoginEndpoint(commonProperties.getOAuth2().getAuthorizeUrl());
         grantTypes.add(new ImplicitGrant(loginEndpoint, "token"));
         return grantTypes;
 	}
@@ -149,6 +160,7 @@ public class SwaggerAutoConfiguration {
             .clientId(commonProperties.getOAuth2().getClientId())
             .clientSecret(commonProperties.getOAuth2().getClientSecret())
             .useBasicAuthenticationWithAccessCodeGrant(true)
+            .appName("TwigAuth")
             .build();
     }
 
