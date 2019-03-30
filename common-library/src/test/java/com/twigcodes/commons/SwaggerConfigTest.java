@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SwaggerConfigTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
-        .withPropertyValues("commons.swaggerApiInfo.scanPackages=com.twigcodes")
+        .withPropertyValues("commons.swagger-api-info.scan-packages=com.twigcodes")
         .withConfiguration(AutoConfigurations.of(SwaggerAutoConfiguration.class));
 
     @Test

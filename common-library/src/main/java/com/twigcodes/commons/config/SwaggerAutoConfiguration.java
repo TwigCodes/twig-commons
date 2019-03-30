@@ -48,7 +48,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
     SecurityScheme.class,
     SecurityConfiguration.class
 })
-@ComponentScan(basePackages = "${commons.swaggerApiInfo.scanPackages}")
+@ComponentScan(basePackages = "${commons.swagger-api-info.scan-packages}")
 @Import({ BeanValidatorPluginsConfiguration.class, CommonProperties.class })
 @Configuration
 public class SwaggerAutoConfiguration {
