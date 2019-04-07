@@ -28,8 +28,6 @@ public class CommonProperties {
     public static class OAuth2 {
         private String serverUrl = "https://auth.twigcodes.com/auth/realms/";
         private String realm = "twigcodes";
-        private String authorizeUrl = serverUrl + realm + "/protocol/openid-connect/auth";
-        private String tokenUrl = serverUrl + realm + "/protocol/openid-connect/token";
         private String clientId = "login-app";
         private String clientSecret = "b888bb5b-2627-453e-b3a7-2fb79c923032";
 
@@ -41,26 +39,23 @@ public class CommonProperties {
             this.serverUrl = serverUrl;
         }
 
-        public String getAuthorizeUrl() {
-            return authorizeUrl;
+        public String getRealm() {
+            return this.realm;
         }
 
-        public void setAuthorizeUrl(String authorizeUrl) {
-            this.authorizeUrl = authorizeUrl;
+        public void setRealm(String realm) {
+            this.realm = realm;
+        }
+
+        public String getAuthorizeUrl() {
+            return serverUrl + realm + "/protocol/openid-connect/auth";
         }
 
         /**
          * @return the tokenUrl
          */
         public String getTokenUrl() {
-            return tokenUrl;
-        }
-
-        /**
-         * @param tokenUrl the tokenUrl to set
-         */
-        public void setTokenUrl(String tokenUrl) {
-            this.tokenUrl = tokenUrl;
+            return serverUrl + realm + "/protocol/openid-connect/token";
         }
 
         public String getClientId() {
